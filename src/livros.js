@@ -7,7 +7,13 @@ const api = axios.create({
 async function listarLivros() {
     try {
         const result = await api.get("/books");
-        return console.log(result.data);
+        const lista = result.data.data.map(item => {
+            return {
+                id: item.id,
+                title: item.title
+            }
+        })
+        console.log(lista);
     } catch (error) {
         console.error("Erro ao listar livros:", error);
     }
