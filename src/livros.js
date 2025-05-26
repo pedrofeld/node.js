@@ -13,7 +13,9 @@ async function listarLivros() {
                 title: item.title
             }
         })
+        console.log("-----------------------");
         console.log(lista);
+        console.log("-----------------------");
     } catch (error) {
         console.error("Erro ao listar livros:", error);
     }
@@ -22,7 +24,9 @@ async function listarLivros() {
 async function buscarLivroPorId(id) {
     try {
         const result = await api.get(`/books/${id}`);
+        console.log("-----------------------");
         console.log(result.data);
+        console.log("-----------------------");
     } catch (error) {
         console.error(`Erro ao buscar livro com ID ${id}:`, error);
     }
@@ -31,14 +35,16 @@ async function buscarLivroPorId(id) {
 async function criarLivro(livro) {
     try {
         const result = await api.post("/books", livro);
+        console.log("------------------------");
         console.log("Livro criado:", result.data.data);
+        console.log("------------------------");
     } catch (error) {
         console.error("Erro ao criar livro:", error);
     }
 }
 
 listarLivros();
-buscarLivroPorId("b1044037-70e4-42cf-9d9d-a8f80a1484b4");
+buscarLivroPorId("5b046734-de36-43cb-9e96-6b09f1e38426");
 criarLivro({
     title: "Novo Livro",
     resume: "Esse é um resumo teste do livro teste",
