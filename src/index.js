@@ -9,7 +9,8 @@ console.log('Odd numbers from 1 to 10: ' + oddNumbers)
 axios
     .get("https://rickandmortyapi.com/api/character")
     .then((result) => {
-        console.log(result);
+        console.log(result.data.results.map((character) => character.name).join(', '));
+        console.log('Total characters: ' + result.data.info.count);
     })
     .catch((error) => {
         console.error(error);
