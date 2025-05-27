@@ -55,7 +55,19 @@ async function atualizarLivro(id, livro) {
     }
 }
 
-// listarLivros();
+async function excluirLivro(id) {
+    try {
+        const result = await api.delete(`/books/${id}`);
+        console.log("------------------------");
+        console.log("Livro excluído:", result.data);
+        console.log("Resultado: " + result.status);
+        console.log("------------------------");
+    } catch (error) {
+        console.error(`Erro ao excluir livro com ID ${id}:`, error);
+    }
+}
+
+listarLivros();
 // buscarLivroPorId("5b046734-de36-43cb-9e96-6b09f1e38426");
 // criarLivro({
 //     title: "Novo Livro",
@@ -65,10 +77,11 @@ async function atualizarLivro(id, livro) {
 //     authorId: "a9715015-5d16-4e0b-a27d-8895ff183e3b"
 // }
 // )
-atualizarLivro("5b046734-de36-43cb-9e96-6b09f1e38426", {
-    title: "Livro Atualizado",
-    resume: "Esse é um resumo atualizado do livro teste",
-    totalPages: 200,
-    isFavorite: true, 
-    authorId: "a9715015-5d16-4e0b-a27d-8895ff183e3b"
-});
+// atualizarLivro("5b046734-de36-43cb-9e96-6b09f1e38426", {
+//     title: "Livro Atualizado",
+//     resume: "Esse é um resumo atualizado do livro teste",
+//     totalPages: 200,
+//     isFavorite: true, 
+//     authorId: "a9715015-5d16-4e0b-a27d-8895ff183e3b"
+// });
+// excluirLivro("eaa4198e-10d4-47c6-b0fc-7895e29d7903")
