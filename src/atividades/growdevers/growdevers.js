@@ -105,6 +105,28 @@ app.put("/growdevers/:id", (req, res) => {
     });
 });
 
+// toggle no campo de matriculado
+app.patch("/growdevers/:id", (req, res) => {
+    const { id } = req.params;
+
+    const growdever = growdevers.find(g => g.id === id);
+
+    if (!growdever) {
+        return res.status(404).send({
+            ok: false,
+            mensagem: "Growdever não encontrado"
+        });
+    }
+
+    growdever.matriculado = !growdever.matriculado;
+
+    res.status(200).send({
+        ok: true,
+        mensagem: "Growdever atualizado com sucesso",
+        dados: growdever
+    });
+})
+
 const porta = process.env.PORT;
 app.listen(porta, () => {
     console.log('Server is running on port', porta);
