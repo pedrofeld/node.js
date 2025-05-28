@@ -80,7 +80,30 @@ app.get("/growdevers/:id", (req, res) => {
     });
 });
 
+app.put("/growdevers/:id", (req, res) => {
+    const { id } = req.params;
+    const { nome, email, idade, matriculado } = req.body;
 
+    const growdever = growdevers.find(g => g.id === id);
+
+    if (!growdever) {
+        return res.status(404).send({
+            ok: false,
+            mensagem: "Growdever não encontrado"
+        });
+    }
+
+    growdever.nome = nome;
+    growdever.email = email;
+    growdever.idade = idade;
+    growdever.matriculado = matriculado;
+
+    res.status(200).send({
+        ok: true,
+        mensagem: "Growdever atualizado com sucesso",
+        dados: growdever
+    });
+});
 
 const porta = process.env.PORT;
 app.listen(porta, () => {
