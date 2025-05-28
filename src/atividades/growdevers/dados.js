@@ -1,4 +1,6 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'crypto'; 
+// desvantagem do randomUUID: quando o servidor reinicia, os IDs mudam
+// vantagem: não precisa de banco de dados para gerar IDs únicos
 
 export const growdevers = [
     {
