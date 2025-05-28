@@ -9,16 +9,24 @@ const app = express();
 app.use(express.json());
 
 app.get("/growdevers", (req, res) => {
-    const { idade, nome } = req.query;
+    const { idade, nome, email, email_includes } = req.query;
 
     let dados = growdevers;
 
     if (idade) {
-        dados = dados.filter(g => g.idade === Number(idade));
+        dados = dados.filter(g => g.idade >= Number(idade));
     }
 
     if (nome) {
         dados = dados.filter(g => g.nome.toLowerCase().includes(nome.toLowerCase()));
+    }
+
+    if (email) {
+        dados = dados.filter(g => g.email.toLowerCase === email.toLowerCase());
+    }
+
+    if (email_includes) {
+        dados = dados.filter(g => g.email.toLowerCase().includes(email_includes.toLowerCase()));
     }
 
     res.status(200).send({
