@@ -127,6 +127,27 @@ app.patch("/growdevers/:id", (req, res) => {
     });
 })
 
+app.delete("/growdevers/:id", (req, res) => {
+    const { id } = req.params;
+
+    const index = growdevers.findIndex(g => g.id === id);
+
+    if (index < 0) {
+        return res.status(404).send({
+            ok: false,
+            mensagem: "Growdever não encontrado"
+        });
+    }
+
+    growdevers.splice(index, 1);
+
+    res.status(200).send({
+        ok: true,
+        mensagem: "Growdever deletado com sucesso",
+        dados: growdevers
+    });
+})
+
 const porta = process.env.PORT;
 app.listen(porta, () => {
     console.log('Server is running on port', porta);
