@@ -38,6 +38,28 @@ app.post("/growdevers", (req, res) => {
     });
 });
 
+app.get("/growdevers/:id", (req, res) => {
+    // 1 etapa: entrada
+    const id = req.params.id;
+
+    // 2 etapa: processamento
+    const growdever = growdevers.find(g => g.id === id);
+
+    if (!growdever) {
+        return res.status(404).send({
+            ok: false,
+            mensagem: "Growdever não encontrado"
+        });
+    }
+
+    // 3 etapa: saída
+    res.status(200).send({
+        ok: true,
+        mensagem: "Growdever encontrado com sucesso",
+        dados: growdever
+    });
+});
+
 const porta = process.env.PORT;
 app.listen(porta, () => {
     console.log('Server is running on port', porta);
