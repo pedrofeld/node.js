@@ -80,7 +80,6 @@ app.post("/growdevers", (req, res) => {
             erro: error.message
         });
     }
-    
 });
 
 app.get("/growdevers/:id", (req, res) => {
@@ -106,72 +105,99 @@ app.get("/growdevers/:id", (req, res) => {
 });
 
 app.put("/growdevers/:id", (req, res) => {
-    const { id } = req.params;
-    const { nome, email, idade, matriculado } = req.body;
+    try {
+        const { id } = req.params;
+        const { nome, email, idade, matriculado } = req.body;
 
-    const growdever = growdevers.find(g => g.id === id);
+        const growdever = growdevers.find(g => g.id === id);
 
-    if (!growdever) {
-        return res.status(404).send({
+        if (!growdever) {
+            return res.status(404).send({
+                ok: false,
+                mensagem: "Growdever não encontrado"
+            });
+        }
+
+        growdever.nome = nome;
+        growdever.email = email;
+        growdever.idade = idade;
+        growdever.matriculado = matriculado;
+
+        res.status(200).send({
+            ok: true,
+            mensagem: "Growdever atualizado com sucesso",
+            dados: growdever
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
             ok: false,
-            mensagem: "Growdever não encontrado"
+            mensagem: "Erro ao cadastrar Growdever",
+            erro: error.message
         });
     }
-
-    growdever.nome = nome;
-    growdever.email = email;
-    growdever.idade = idade;
-    growdever.matriculado = matriculado;
-
-    res.status(200).send({
-        ok: true,
-        mensagem: "Growdever atualizado com sucesso",
-        dados: growdever
-    });
 });
 
 // toggle no campo de matriculado
 app.patch("/growdevers/:id", (req, res) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const growdever = growdevers.find(g => g.id === id);
+        const growdever = growdevers.find(g => g.id === id);
 
-    if (!growdever) {
-        return res.status(404).send({
+        if (!growdever) {
+            return res.status(404).send({
+                ok: false,
+                mensagem: "Growdever não encontrado"
+            });
+        }
+
+        growdever.matriculado = !growdever.matriculado;
+
+        res.status(200).send({
+            ok: true,
+            mensagem: "Growdever atualizado com sucesso",
+            dados: growdever
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
             ok: false,
-            mensagem: "Growdever não encontrado"
+            mensagem: "Erro ao cadastrar Growdever",
+            erro: error.message
         });
     }
-
-    growdever.matriculado = !growdever.matriculado;
-
-    res.status(200).send({
-        ok: true,
-        mensagem: "Growdever atualizado com sucesso",
-        dados: growdever
-    });
 })
 
 app.delete("/growdevers/:id", (req, res) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const index = growdevers.findIndex(g => g.id === id);
+        const index = growdevers.findIndex(g => g.id === id);
 
-    if (index < 0) {
-        return res.status(404).send({
+        if (index < 0) {
+            return res.status(404).send({
+                ok: false,
+                mensagem: "Growdever não encontrado"
+            });
+        }
+
+        growdevers.splice(index, 1);
+
+        res.status(200).send({
+            ok: true,
+            mensagem: "Growdever deletado com sucesso",
+            dados: growdevers
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
             ok: false,
-            mensagem: "Growdever não encontrado"
+            mensagem: "Erro ao cadastrar Growdever",
+            erro: error.message
         });
     }
-
-    growdevers.splice(index, 1);
-
-    res.status(200).send({
-        ok: true,
-        mensagem: "Growdever deletado com sucesso",
-        dados: growdevers
-    });
-})
+});
 
 const porta = process.env.PORT;
 app.listen(porta, () => {
