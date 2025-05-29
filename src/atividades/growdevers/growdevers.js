@@ -2,7 +2,7 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import { growdevers } from './dados.js';
 import { randomUUID } from 'crypto'; 
-import { logMiddleware, logRequestMiddleware } from './middleware.js';
+import { logMiddleware, logRequestMiddleware, logBloquearAtualizacaoGrowNaoMatriculadoMiddleware } from './middleware.js';
 
 dotenv.config();
 
@@ -10,31 +10,40 @@ const app = express();
 app.use(express.json());
 
 app.get("/growdevers", [logMiddleware, logRequestMiddleware], (req, res) => {
-    const { idade, nome, email, email_includes } = req.query;
+    try {
+        const { idade, nome, email, email_includes } = req.query;
 
-    let dados = growdevers;
+        let dados = growdevers;
 
-    if (idade) {
-        dados = dados.filter(g => g.idade >= Number(idade));
-    }
+        if (idade) {
+            dados = dados.filter(g => g.idade >= Number(idade));
+        }
 
-    if (nome) {
-        dados = dados.filter(g => g.nome.toLowerCase().includes(nome.toLowerCase()));
-    }
+        if (nome) {
+            dados = dados.filter(g => g.nome.toLowerCase().includes(nome.toLowerCase()));
+        }
 
-    if (email) {
-        dados = dados.filter(g => g.email.toLowerCase === email.toLowerCase());
-    }
+        if (email) {
+            dados = dados.filter(g => g.email.toLowerCase === email.toLowerCase());
+        }
 
-    if (email_includes) {
-        dados = dados.filter(g => g.email.toLowerCase().includes(email_includes.toLowerCase()));
-    }
+        if (email_includes) {
+            dados = dados.filter(g => g.email.toLowerCase().includes(email_includes.toLowerCase()));
+        }
 
-    res.status(200).send({
-        ok: true,
-        mensagem: "Growdevers listados com sucesso",
-        dados
+        res.status(200).send({
+            ok: true,
+            mensagem: "Growdevers listados com sucesso",
+            dados
     });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            ok: false,
+            mensagem: "Erro ao cadastrar Growdever",
+            erro: error.message
+        });
+    }
 });
 
 app.post("/growdevers", [logRequestMiddleware], (req, res) => {
@@ -105,7 +114,7 @@ app.get("/growdevers/:id", (req, res) => {
     });
 });
 
-app.put("/growdevers/:id", (req, res) => {
+app.put("/growdevers/:id", [logBloquearAtualizacaoGrowNaoMatriculadoMiddleware], (req, res) => {
     try {
         const { id } = req.params;
         const { nome, email, idade, matriculado } = req.body;
@@ -140,7 +149,7 @@ app.put("/growdevers/:id", (req, res) => {
 });
 
 // toggle no campo de matriculado
-app.patch("/growdevers/:id", (req, res) => {
+app.patch("/growdevers/:id", [logBloquearAtualizacaoGrowNaoMatriculadoMiddleware], (req, res) => {
     try {
         const { id } = req.params;
 
