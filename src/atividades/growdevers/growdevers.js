@@ -2,13 +2,14 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import { growdevers } from './dados.js';
 import { randomUUID } from 'crypto'; 
+import { logMiddleware } from './middleware.js';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-app.get("/growdevers", (req, res) => {
+app.get("/growdevers", [logMiddleware], (req, res) => {
     const { idade, nome, email, email_includes } = req.query;
 
     let dados = growdevers;
