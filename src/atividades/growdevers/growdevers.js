@@ -37,25 +37,35 @@ app.get("/growdevers", (req, res) => {
 });
 
 app.post("/growdevers", (req, res) => {
-    // 1 etapa: entrada
-    const body = req.body;
-    const novoGrowdever = {
-        id: randomUUID(),
-        nome: body.nome,
-        email: body.email,
-        idade: body.idade,
-        matriculado: body.matriculado
-    };
+    try {
+        // 1 etapa: entrada
+        const body = req.body;
+        const novoGrowdever = {
+            id: randomUUID(),
+            nome: body.nome,
+            email: body.email,
+            idade: body.idade,
+            matriculado: body.matriculado
+        };
 
-    // 2 etapa: processamento
-    growdevers.push(novoGrowdever);
+        // 2 etapa: processamento
+        growdevers.push(novoGrowdever);
+        
+        // 3 etapa: saída
+        res.status(201).send({
+            ok: true,
+            mensagem: "Growdever cadastrado com sucesso",
+            dados: novoGrowdever
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            ok: false,
+            mensagem: "Erro ao cadastrar Growdever",
+            erro: error.message
+        });
+    }
     
-    // 3 etapa: saída
-    res.status(201).send({
-        ok: true,
-        mensagem: "Growdever cadastrado com sucesso",
-        dados: novoGrowdever
-    });
 });
 
 app.get("/growdevers/:id", (req, res) => {
