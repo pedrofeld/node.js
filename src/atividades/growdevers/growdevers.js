@@ -2,14 +2,14 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import { growdevers } from './dados.js';
 import { randomUUID } from 'crypto'; 
-import { logMiddleware } from './middleware.js';
+import { logMiddleware, logRequestMiddleware } from './middleware.js';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-app.get("/growdevers", [logMiddleware], (req, res) => {
+app.get("/growdevers", [logMiddleware, logRequestMiddleware], (req, res) => {
     const { idade, nome, email, email_includes } = req.query;
 
     let dados = growdevers;
@@ -37,7 +37,7 @@ app.get("/growdevers", [logMiddleware], (req, res) => {
     });
 });
 
-app.post("/growdevers", (req, res) => {
+app.post("/growdevers", [logRequestMiddleware], (req, res) => {
     try {
         // 1 etapa: entrada
         const body = req.body;
