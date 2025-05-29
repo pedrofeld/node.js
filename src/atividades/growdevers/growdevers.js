@@ -40,6 +40,21 @@ app.post("/growdevers", (req, res) => {
     try {
         // 1 etapa: entrada
         const body = req.body;
+
+        if(!body.nome || !body.email || !body.idade || !body.matriculado) {
+            return res.status(400).send({
+                ok: false,
+                mensagem: "Todos os campos são obrigatórios"
+            });
+        }
+
+        if(Number(body.idade) <18) {
+            return res.status(400).send({
+                ok: false,
+                mensagem: "Idade mínima é 18 anos"
+            });
+        }
+
         const novoGrowdever = {
             id: randomUUID(),
             nome: body.nome,
