@@ -9,7 +9,11 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://growdev.com.br",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.get("/growdevers", [logMiddleware, logRequestMiddleware], (req, res) => {
     try {
