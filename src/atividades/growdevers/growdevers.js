@@ -3,11 +3,13 @@ import * as dotenv from 'dotenv';
 import { growdevers } from './dados.js';
 import { randomUUID } from 'crypto'; 
 import { logMiddleware, logRequestMiddleware, logBloquearAtualizacaoGrowNaoMatriculadoMiddleware } from './middleware.js';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get("/growdevers", [logMiddleware, logRequestMiddleware], (req, res) => {
     try {
